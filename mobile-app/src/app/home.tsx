@@ -1,17 +1,17 @@
 import { View, Text, Alert } from 'react-native';
 import { api } from "@/services/api"
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Categories, CategoriesProps } from '@/components/Categories';
 
 export default function Home() {
-  // const [categories, setCategories] = useState<CategoriesProps>([])
-  // const [category, setCategory] = useState("")
+  const [categories, setCategories] = useState<CategoriesProps>([])
+  const [category, setCategory] = useState("")
 
   async function fetchCategories() {
     try {
       const { data } = await api.get("/categories")
-      console.log({data})
-      // setCategories(data)
-      // setCategory(data[0].id)
+      setCategories(data)
+      setCategory(data[0].id)
     } catch (error) {
       console.log(error)
       Alert.alert("Categorias", "Não foi possível carregar as categorias.")
@@ -23,8 +23,14 @@ export default function Home() {
   }, [])
 
   return (
-    <View>
-      <Text>Home</Text>
+    <View style={{ flex: 1, backgroundColor: "#CECECE" }}>
+      <Categories
+        data={categories}
+        onSelect={setCategory}
+        selected={category}
+      />
+
+      {/* <Places data={markets} /> */}
     </View>
   );
 }
