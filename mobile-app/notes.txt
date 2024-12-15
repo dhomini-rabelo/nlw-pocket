@@ -1,0 +1,2 @@
+- assets/images/
+splash icon -> splash screen (displayed screen while the app is loading)
