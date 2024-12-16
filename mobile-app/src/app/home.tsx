@@ -2,10 +2,14 @@ import { View, Text, Alert } from 'react-native';
 import { api } from "@/services/api"
 import { useEffect, useState } from 'react';
 import { Categories, CategoriesProps } from '@/components/Categories';
+import { PlaceProps as MarketsProps } from '@/components/Place';
+import { Places } from '@/components/Places';
+
 
 export default function Home() {
   const [categories, setCategories] = useState<CategoriesProps>([])
   const [category, setCategory] = useState("")
+  const [markets, setMarkets] = useState<MarketsProps[]>([])
 
   async function fetchCategories() {
     try {
@@ -18,9 +22,27 @@ export default function Home() {
     }
   }
 
+async function fetchMarkets(category: string) {
+  if (!category) {
+    return
+  }
+    
+  try {
+      const { data } = await api.get("/markets/category/" + category)
+      setMarkets(data)
+    } catch (error) {
+      console.log(error)
+      Alert.alert("Locais", "Não foi possível carregar os locais.")
+    }
+  }
+
   useEffect(() => {
     fetchCategories()
   }, [])
+
+  useEffect(() => {
+    fetchMarkets(category)
+  }, [category])
 
   return (
     <View style={{ flex: 1, backgroundColor: "#CECECE" }}>
@@ -30,7 +52,7 @@ export default function Home() {
         selected={category}
       />
 
-      {/* <Places data={markets} /> */}
+      <Places data={markets} />
     </View>
   );
 }

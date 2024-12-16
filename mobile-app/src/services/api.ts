@@ -1,6 +1,6 @@
-import axios, { AxiosError } from "axios"
+import axios from "axios"
 
 export const api = axios.create({
-  baseURL: "https://0ea4bdad849bc4.lhr.life/",
+  baseURL: " https://28f16a60f4cdb6.lhr.life/",
   timeout: 5000,
 })
