@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react"
-import { View, Alert, Text } from "react-native"
-import MapView, { Callout, Marker } from "react-native-maps"
+import { View, Alert } from "react-native"
+import MapView, { Marker } from "react-native-maps"
 import { router } from "expo-router"
 
 import { api } from "@/services/api"
-import { fontFamily, colors } from "@/styles/theme"
 
 import { Places } from "@/components/Places"
 import { PlaceProps } from "@/components/Place"
@@ -66,66 +65,41 @@ export default function Home() {
         selected={category}
       />
 
-      {
-        markets.length > 0 && (
-          <MapView
-            style={{ flex: 1 }}
-            initialRegion={{
-              latitude: currentLocation.latitude,
-              longitude: currentLocation.longitude,
-              latitudeDelta: 0.1,
-              longitudeDelta: 0.1,
+      {markets.length > 0 && (
+        
+      <MapView
+        style={{ flex: 1 }}
+        initialRegion={{
+          latitude: currentLocation.latitude,
+          longitude: currentLocation.longitude,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        }}
+      >
+        <Marker
+          coordinate={{
+            latitude: currentLocation.latitude,
+            longitude: currentLocation.longitude,
+          }}
+          image={require("@/assets/location.png")}
+        />
+
+        {markets.map((item) => (
+          <Marker
+            key={item.id}
+            identifier={item.id}
+            coordinate={{
+              latitude: item.latitude,
+              longitude: item.longitude,
             }}
-          >
-            <Marker
-              identifier="current"
-              coordinate={{
-                latitude: currentLocation.latitude,
-                longitude: currentLocation.longitude,
-              }}
-              image={require("@/assets/location.png")}
-            />
-
-            {markets.map((item) => (
-              <Marker
-                key={item.id}
-                identifier={item.id}
-                coordinate={{
-                  latitude: item.latitude,
-                  longitude: item.longitude,
-                }}
-                image={require("@/assets/pin.png")}
-              >
-                <Callout
-                  onPress={() => router.navigate(`/markets/${item.id}`)}
-                >
-                  <View>
-                    <Text
-                      style={{
-                        fontSize: 14,
-                        color: colors.gray[600],
-                        fontFamily: fontFamily.medium,
-                      }}
-                    >
-                      {item.name}
-                    </Text>
-
-                    <Text
-                      style={{
-                        fontSize: 12,
-                        color: colors.gray[600],
-                        fontFamily: fontFamily.regular,
-                      }}
-                    >
-                      {item.address}
-                    </Text>
-                  </View>
-                </Callout>
-              </Marker>
+            image={require("@/assets/pin.png")}
+            title={item.name}
+            description={item.address}
+            onCalloutPress={() => router.navigate(`/markets/${item.id}`)}
+          />
         ))}
       </MapView>
-        )
-      }
+      )}
 
       <Places data={markets} />
     </View>
