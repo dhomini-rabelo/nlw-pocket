@@ -67,7 +67,7 @@ export default function Home() {
 
       {markets.length > 0 && (
         
-      <MapView
+        <MapView
         style={{ flex: 1 }}
         initialRegion={{
           latitude: currentLocation.latitude,
@@ -75,27 +75,28 @@ export default function Home() {
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
         }}
-      >
-        <Marker
-          coordinate={{
-            latitude: currentLocation.latitude,
-            longitude: currentLocation.longitude,
-          }}
-          image={require("@/assets/location.png")}
-        />
+        >
+          <Marker
+            identifier="currentLocation"
+            coordinate={{
+              latitude: currentLocation.latitude,
+              longitude: currentLocation.longitude,
+            }}
+            image={require("@/assets/location.png")}
+            />
 
         {markets.map((item) => (
           <Marker
-            key={item.id}
-            identifier={item.id}
-            coordinate={{
-              latitude: item.latitude,
-              longitude: item.longitude,
-            }}
-            image={require("@/assets/pin.png")}
-            title={item.name}
-            description={item.address}
-            onCalloutPress={() => router.navigate(`/markets/${item.id}`)}
+          key={item.id}
+          identifier={item.id}
+          coordinate={{
+            latitude: item.latitude,
+            longitude: item.longitude,
+          }}
+          image={require("@/assets/pin.png")}
+          title={item.name}
+          description={item.address}
+          onCalloutPress={() => router.navigate(`/markets/${item.id}`)}
           />
         ))}
       </MapView>
